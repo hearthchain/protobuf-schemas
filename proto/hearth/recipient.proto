@@ -1,0 +1,10 @@
+syntax = "proto3";
+package hearth;
+option java_package = "tech.hearth.protobuf.transaction";
+option csharp_namespace = "Waves";
+option go_package = "github.com/wavesplatform/gowaves/pkg/grpc/generated/hearth";
+
+message Recipient {
+  // First 20 bytes of the result of the Keccak256(Blake2b256(publicKey)) hashing function.
+  bytes public_key_hash = 1;
+};

@@ -1,10 +1,10 @@
 syntax = "proto3";
-package waves.events.grpc;
-option java_package = "com.wavesplatform.events.api.grpc.protobuf";
+package hearth.events.grpc;
+option java_package = "tech.hearth.events.api.grpc.protobuf";
 option csharp_namespace = "Waves.Events.Grpc";
-option go_package = "github.com/wavesplatform/gowaves/pkg/grpc/generated/waves/events/grpc";
+option go_package = "github.com/wavesplatform/gowaves/pkg/grpc/generated/hearth/events/grpc";
 
-import "waves/events/events.proto";
+import "hearth/events/events.proto";
 
 service BlockchainUpdatesApi {
     rpc GetBlockUpdate (GetBlockUpdateRequest) returns (GetBlockUpdateResponse);
@@ -17,7 +17,7 @@ message GetBlockUpdateRequest {
 }
 
 message GetBlockUpdateResponse {
-    waves.events.BlockchainUpdated update = 1;
+    hearth.events.BlockchainUpdated update = 1;
 }
 
 message GetBlockUpdatesRangeRequest {
@@ -27,7 +27,7 @@ message GetBlockUpdatesRangeRequest {
 }
 
 message GetBlockUpdatesRangeResponse {
-    repeated waves.events.BlockchainUpdated updates = 1;
+    repeated hearth.events.BlockchainUpdated updates = 1;
 }
 
 message SubscribeRequest {
@@ -38,5 +38,5 @@ message SubscribeRequest {
 }
 
 message SubscribeEvent {
-    waves.events.BlockchainUpdated update = 1;
+    hearth.events.BlockchainUpdated update = 1;
 }

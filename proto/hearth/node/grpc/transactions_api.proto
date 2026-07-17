@@ -1,13 +1,12 @@
 syntax = "proto3";
-package waves.node.grpc;
-option java_package = "com.wavesplatform.api.grpc";
+package hearth.node.grpc;
+option java_package = "tech.hearth.api.grpc";
 option csharp_namespace = "Waves.Node.Grpc";
-option go_package = "github.com/wavesplatform/gowaves/pkg/grpc/generated/waves/node/grpc";
+option go_package = "github.com/wavesplatform/gowaves/pkg/grpc/generated/hearth/node/grpc";
 
-import "waves/recipient.proto";
-import "waves/transaction.proto";
-import "waves/transaction_state_snapshot.proto";
-import "waves/invoke_script_result.proto";
+import "hearth/recipient.proto";
+import "hearth/transaction.proto";
+import "hearth/transaction_state_snapshot.proto";
 
 service TransactionsApi {
     rpc GetTransactions (TransactionsRequest) returns (stream TransactionResponse);
@@ -47,7 +46,6 @@ message TransactionResponse {
     int64 height = 2;
     SignedTransaction transaction = 3;
     ApplicationStatus application_status = 4;
-    InvokeScriptResult invoke_script_result = 5;
 }
 
 message TransactionsRequest {
@@ -81,5 +79,4 @@ message SignRequest {
 
 message InvokeScriptResultResponse {
     SignedTransaction transaction = 1;
-    InvokeScriptResult result = 2;
 }

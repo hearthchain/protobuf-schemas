@@ -1,13 +1,11 @@
 syntax = "proto3";
-package waves.events;
-option java_package = "com.wavesplatform.events.protobuf";
-option go_package = "github.com/wavesplatform/gowaves/pkg/grpc/generated/waves/events";
+package hearth.events;
+option java_package = "tech.hearth.events.protobuf";
+option go_package = "github.com/wavesplatform/gowaves/pkg/grpc/generated/hearth/events";
 
-import "waves/block.proto";
-import "waves/amount.proto";
-import "waves/transaction.proto";
-import "waves/invoke_script_result.proto";
-import "waves/reward_share.proto";
+import "hearth/block.proto";
+import "hearth/amount.proto";
+import "hearth/reward_share.proto";
 
 message BlockchainUpdated {
     bytes id = 1;
@@ -63,11 +61,8 @@ message BlockchainUpdated {
 message StateUpdate {
     repeated BalanceUpdate balances = 1;
     repeated LeasingUpdate leasing_for_address = 2;
-    repeated DataEntryUpdate data_entries = 3;
     repeated AssetStateUpdate assets = 4;
     repeated LeaseUpdate individual_leases = 5;
-    repeated ScriptUpdate scripts = 6;
-    repeated string deleted_aliases = 7;
 
     message BalanceUpdate {
         bytes address = 1;
@@ -95,12 +90,6 @@ message StateUpdate {
         bytes sender = 11;
         bytes recipient = 12;
         bytes origin_transaction_id = 13;
-    }
-
-    message DataEntryUpdate {
-        bytes address = 1;
-        DataEntry data_entry = 2;
-        DataEntry data_entry_before = 10;
     }
 
     message AssetStateUpdate {
@@ -157,9 +146,7 @@ message TransactionMetadata {
         TransferMetadata transfer = 104;
         ExchangeMetadata exchange = 107;
         MassTransferMetadata mass_transfer = 111;
-        InvokeScriptMetadata invoke_script = 116;
         LeaseMetadata lease = 117;
-        EthereumMetadata ethereum = 301;
     };
 
     message TransferMetadata {
@@ -181,30 +168,6 @@ message TransactionMetadata {
         repeated bytes order_sender_public_keys = 3;
     }
 
-    message InvokeScriptMetadata {
-        bytes d_app_address = 1;
-        string function_name = 2;
-        repeated InvokeScriptResult.Call.Argument arguments = 3;
-        repeated Amount payments = 4;
-        InvokeScriptResult result = 5;
-
-        // bytes sender_address = 6;
-
-        message Argument {
-            message List {
-                repeated Argument items = 1;
-            }
-
-            oneof value {
-                int64 integer_value = 1;
-                bytes binary_value = 2;
-                string string_value = 3;
-                bool boolean_value = 4;
-                List list = 10;
-            }
-        }
-    }
-
     message LeaseMetadata {
         bytes recipient_address = 1;
     }
@@ -212,17 +175,5 @@ message TransactionMetadata {
     message EthereumTransferMetadata {
         bytes recipient_address = 1;
         Amount amount = 2;
-    }
-
-    message EthereumMetadata {
-        // bytes sender_address = 1;
-        int64 timestamp = 2;
-        int64 fee = 3;
-        bytes sender_public_key = 4;
-
-        oneof Action {
-            EthereumTransferMetadata transfer = 10;
-            InvokeScriptMetadata invoke = 11;
-        }
     }
 }

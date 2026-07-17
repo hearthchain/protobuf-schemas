@@ -1,10 +1,10 @@
 syntax = "proto3";
-package waves;
-option java_package = "com.wavesplatform.protobuf.order";
+package hearth;
+option java_package = "tech.hearth.protobuf.order";
 option csharp_namespace = "Waves";
-option go_package = "github.com/wavesplatform/gowaves/pkg/grpc/generated/waves";
+option go_package = "github.com/wavesplatform/gowaves/pkg/grpc/generated/hearth";
 
-import "waves/amount.proto";
+import "hearth/amount.proto";
 
 message AssetPair {
     bytes amount_asset_id = 1;
@@ -24,6 +24,7 @@ message Order {
     };
 
     int32 chain_id = 1;
+    bytes sender_public_key = 2;
     bytes matcher_public_key = 3;
     AssetPair asset_pair = 4;
     Side order_side = 5;
@@ -36,9 +37,4 @@ message Order {
     repeated bytes proofs = 12;
     PriceMode price_mode = 14;
     bytes attachment = 15;
-
-    oneof sender {
-        bytes sender_public_key = 2;
-        bytes eip712_signature = 13;
-    }
 };

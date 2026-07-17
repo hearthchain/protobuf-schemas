@@ -1,11 +1,10 @@
 syntax = "proto3";
-package waves;
-option java_package = "com.wavesplatform.protobuf.snapshot";
+package hearth;
+option java_package = "tech.hearth.protobuf.snapshot";
 option csharp_namespace = "Waves";
-option go_package = "github.com/wavesplatform/gowaves/pkg/grpc/generated/waves";
+option go_package = "github.com/wavesplatform/gowaves/pkg/grpc/generated/hearth";
 
-import "waves/amount.proto";
-import "waves/transaction.proto";
+import "hearth/amount.proto";
 
 message TransactionStateSnapshot {
   repeated Balance balances = 1;
@@ -15,12 +14,7 @@ message TransactionStateSnapshot {
   repeated NewAsset asset_statics = 5;
   repeated AssetVolume asset_volumes = 6;
   repeated AssetNameAndDescription asset_names_and_descriptions = 7;
-  AssetScript asset_scripts = 8;
-  Alias aliases = 9;
   repeated OrderFill order_fills = 10;
-  AccountScript account_scripts = 11;
-  repeated AccountData account_data = 12;
-  repeated Sponsorship sponsorships = 13;
   TransactionStatus transaction_status = 14;
   GenerationCommitment generation_commitment = 15;
 
@@ -65,41 +59,16 @@ message TransactionStateSnapshot {
     string description = 3;
   }
 
-  message AssetScript {
-    bytes asset_id = 1;
-    bytes script = 2;
-  }
-
-  message Alias {
-    bytes address = 1;
-    string alias = 2;
-  }
-
   message OrderFill {
     bytes order_id = 1;
     int64 volume = 2;
     int64 fee = 3;
   }
 
-  message AccountScript {
-    bytes sender_public_key = 1;
-    bytes script = 2;
-    int64 verifier_complexity = 3;
-  }
-
-  message AccountData {
-    bytes address = 1;
-    repeated DataEntry entries = 2;
-  }
-
-  message Sponsorship {
-    bytes asset_id = 1;
-    int64 min_fee = 2;
-  }
-
   message GenerationCommitment {
     bytes sender_public_key = 1;
     bytes endorser_public_key = 2;
+    bytes vrf_public_key = 3;
   }
 }
 

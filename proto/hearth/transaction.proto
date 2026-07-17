@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package hearth;
+
+option java_package = "tech.hearth.protobuf.transaction";
+option csharp_namespace = "Waves";
+option go_package = "github.com/wavesplatform/gowaves/pkg/grpc/generated/hearth";
+
+import "hearth/amount.proto";
+import "hearth/recipient.proto";
+import "hearth/order.proto";
+
+message SignedTransaction {
+    Transaction waves_transaction = 1;
+    repeated bytes proofs = 2;
+}
+
+message Transaction {
+    int32 chain_id = 1;
+    bytes sender_public_key = 2;
+    Amount fee = 3;
+    int64 timestamp = 4;
+    int32 version = 5;
+
+    oneof data {
+        TransferTransactionData transfer = 104;
+        ExchangeTransactionData exchange = 107;
+        LeaseTransactionData lease = 108;
+        LeaseCancelTransactionData lease_cancel = 109;
+        MassTransferTransactionData mass_transfer = 111;
+        CommitToGenerationTransactionData commit_to_generation = 120;
+    };
+};
+
+message TransferTransactionData {
+    Recipient recipient = 1;
+    Amount amount = 2;
+    bytes attachment = 3;
+};
+
+message MassTransferTransactionData {
+    message Transfer {
+        Recipient recipient = 1;
+        int64 amount = 2;
+    };
+
+    bytes asset_id = 1;
+    repeated Transfer transfers = 2;
+    bytes attachment = 3;
+};
+
+message LeaseTransactionData {
+    Recipient recipient = 1;
+    int64 amount = 2;
+};
+
+message LeaseCancelTransactionData {
+    bytes lease_id = 1;
+};
+
+message ExchangeTransactionData {
+    int64 amount = 1;
+    int64 price = 2;
+    int64 buy_matcher_fee = 3;
+    int64 sell_matcher_fee = 4;
+    repeated Order orders = 5;
+};
+
+message CommitToGenerationTransactionData {
+    uint32 generation_period_start = 1;
+    bytes endorser_public_key = 2; // BLS
+    bytes commitment_signature = 3; // BLS signature for endorser_public_key ++ generation_period_start
+    bytes vrf_public_key = 4;
+    bytes vrf_commitment_signature = 5;
+}
