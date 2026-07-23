@@ -3,8 +3,8 @@ syntax = "proto3";
 package hearth;
 
 option java_package = "tech.hearth.protobuf.transaction";
-option csharp_namespace = "Waves";
-option go_package = "github.com/wavesplatform/gowaves/pkg/grpc/generated/hearth";
+option csharp_namespace = "Hearth";
+option go_package = "github.com/hearthchain/node-go/pkg/grpc/generated/hearth";
 
 import "hearth/amount.proto";
 import "hearth/recipient.proto";
@@ -20,15 +20,14 @@ message Transaction {
     bytes sender_public_key = 2;
     Amount fee = 3;
     int64 timestamp = 4;
-    int32 version = 5;
 
     oneof data {
-        TransferTransactionData transfer = 104;
-        ExchangeTransactionData exchange = 107;
-        LeaseTransactionData lease = 108;
-        LeaseCancelTransactionData lease_cancel = 109;
-        MassTransferTransactionData mass_transfer = 111;
-        CommitToGenerationTransactionData commit_to_generation = 120;
+        TransferTransactionData transfer = 101;
+        ExchangeTransactionData exchange = 102;
+        LeaseTransactionData lease = 103;
+        LeaseCancelTransactionData lease_cancel = 104;
+        MassTransferTransactionData mass_transfer = 105;
+        CommitToGenerationTransactionData commit_to_generation = 106;
     };
 };
 

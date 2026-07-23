@@ -1,8 +1,8 @@
 syntax = "proto3";
 package hearth;
 option java_package = "tech.hearth.protobuf";
-option csharp_namespace = "Waves";
-option go_package = "github.com/wavesplatform/gowaves/pkg/grpc/generated/hearth";
+option csharp_namespace = "Hearth";
+option go_package = "github.com/hearthchain/node-go/pkg/grpc/generated/hearth";
 
 message RewardShare {
     bytes address = 1;
