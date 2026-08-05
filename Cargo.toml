@@ -1,11 +1,21 @@
 [package]
-name = "waves-protobuf-schemas"
-version = "1.5.2"
+name = "hearth-protobuf-schemas"
+description = "Hearth protobuf schemas"
+version = "0.1.0"
 edition = "2021"
 
+[features]
+default = []
+# Also generate the gRPC API and blockchain updates services (pulls in tonic).
+grpc = ["dep:tonic", "dep:tonic-prost", "dep:prost-types", "dep:tonic-prost-build"]
+
 [dependencies]
-tonic = "0.10"
-prost = { version = "0.12", features = ["no-recursion-limit"] }
+prost = "0.14"
+prost-types = { version = "0.14", optional = true }
+tonic = { version = "0.14", optional = true }
+tonic-prost = { version = "0.14", optional = true }
 
 [build-dependencies]
-tonic-build = "0.10"
+prost-build = "0.14"
+protox = "0.9"
+tonic-prost-build = { version = "0.14", optional = true }

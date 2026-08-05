@@ -73,8 +73,18 @@ Also there is a NuGet package WavesPlatform.ProtobufSchema with this project.
 Add dependency to your `Cargo.toml`
 ```toml
 [dependencies]
-waves-protobuf-schemas = { git = "https://github.com/wavesplatform/protobuf-schemas" }
+hearth-protobuf-schemas = { git = "https://github.com/hearthchain/protobuf-schemas" }
 ```
+
+The message types (blocks, transactions, snapshots) are built by default. Enable the
+`grpc` feature to also generate the gRPC API and blockchain-updates services (pulls in tonic):
+```toml
+[dependencies]
+hearth-protobuf-schemas = { git = "https://github.com/hearthchain/protobuf-schemas", features = ["grpc"] }
+```
+
+Code is generated at build time with `prost-build`/`tonic-build` using `protox`, so no
+system `protoc` installation is required.
 
 # How to generate sources locally
 

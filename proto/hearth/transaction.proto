@@ -28,6 +28,10 @@ message Transaction {
         LeaseCancelTransactionData lease_cancel = 104;
         MassTransferTransactionData mass_transfer = 105;
         CommitToGenerationTransactionData commit_to_generation = 106;
+        StartBoostTransactionData start_boost = 107;
+        ReserveTransactionData reserve = 108;
+        SettleTransactionData settle = 109;
+        WithdrawTransactionData withdraw = 110;
     };
 };
 
@@ -71,4 +75,20 @@ message CommitToGenerationTransactionData {
     bytes commitment_signature = 3; // BLS signature for endorser_public_key ++ generation_period_start
     bytes vrf_public_key = 4;
     bytes vrf_commitment_signature = 5;
+}
+
+message StartBoostTransactionData {
+
+}
+
+message ReserveTransactionData {
+
+}
+
+message SettleTransactionData {
+
+}
+
+message WithdrawTransactionData {
+
 }
