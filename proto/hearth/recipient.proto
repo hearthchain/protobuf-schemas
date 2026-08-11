@@ -5,6 +5,5 @@ option csharp_namespace = "Hearth";
 option go_package = "github.com/hearthchain/node-go/pkg/grpc/generated/hearth";
 
 message Recipient {
-  // First 20 bytes of the result of the Keccak256(Blake2b256(publicKey)) hashing function.
   bytes public_key_hash = 1;
 };

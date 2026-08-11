@@ -82,7 +82,8 @@ message StartBoostTransactionData {
 }
 
 message ReserveTransactionData {
-
+  Amount amount = 1;
+  Recipient miner = 2;
 }
 
 message SettleTransactionData {

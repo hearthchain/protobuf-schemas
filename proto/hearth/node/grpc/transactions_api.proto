@@ -11,9 +11,6 @@ import "hearth/transaction_state_snapshot.proto";
 service TransactionsApi {
     rpc GetTransactions (TransactionsRequest) returns (stream TransactionResponse);
     rpc GetTransactionSnapshots (TransactionSnapshotsRequest) returns (stream TransactionSnapshotResponse);
-    rpc GetStateChanges (TransactionsRequest) returns (stream InvokeScriptResultResponse) {
-        option deprecated = true;
-    };
     rpc GetStatuses (TransactionsByIdRequest) returns (stream TransactionStatus);
     rpc GetUnconfirmed (TransactionsRequest) returns (stream TransactionResponse);
 
