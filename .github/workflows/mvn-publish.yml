@@ -65,4 +65,4 @@ jobs:
             echo ::error title=Non-SNAPSHOT version::Refusing to publish non-snapshot version $mvn_version
             exit 1
           fi
-          mvn -B deploy
+          mvn --batch-mode --no-transfer-progress deploy
