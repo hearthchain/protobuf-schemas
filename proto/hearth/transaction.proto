@@ -11,14 +11,14 @@ import "hearth/recipient.proto";
 import "hearth/order.proto";
 
 message SignedTransaction {
-    Transaction waves_transaction = 1;
+    Transaction transaction = 1;
     repeated bytes proofs = 2;
 }
 
 message Transaction {
     int32 chain_id = 1;
     bytes sender_public_key = 2;
-    Amount fee = 3;
+    int64 fee = 3;
     int64 timestamp = 4;
 
     oneof data {
@@ -26,30 +26,25 @@ message Transaction {
         ExchangeTransactionData exchange = 102;
         LeaseTransactionData lease = 103;
         LeaseCancelTransactionData lease_cancel = 104;
-        MassTransferTransactionData mass_transfer = 105;
-        CommitToGenerationTransactionData commit_to_generation = 106;
-        StartBoostTransactionData start_boost = 107;
-        ReserveTransactionData reserve = 108;
+        CommitToGenerationTransactionData commit_to_generation = 105;
+        StartBoostTransactionData start_boost = 106;
+        ReserveTransactionData reserve = 107;
+        BindApiKeyTransactionData bind_api_key = 108;
         SettleTransactionData settle = 109;
         WithdrawTransactionData withdraw = 110;
     };
 };
 
 message TransferTransactionData {
-    Recipient recipient = 1;
-    Amount amount = 2;
-    bytes attachment = 3;
-};
-
-message MassTransferTransactionData {
     message Transfer {
-        Recipient recipient = 1;
-        int64 amount = 2;
+      Recipient recipient = 1;
+      int64 amount = 2;
     };
 
     bytes asset_id = 1;
     repeated Transfer transfers = 2;
     bytes attachment = 3;
+    bytes fee_asset_id = 4;
 };
 
 message LeaseTransactionData {
@@ -78,18 +73,27 @@ message CommitToGenerationTransactionData {
 }
 
 message StartBoostTransactionData {
+    Recipient validator = 1;
+    bytes tdx_quote = 2;
+}
 
+message BindApiKeyTransactionData {
+    bytes enclave_public_key = 1;
+    bytes encrypted_api_key = 2;
 }
 
 message ReserveTransactionData {
-  Amount amount = 1;
-  Recipient miner = 2;
+    Amount amount = 1;
+    Recipient miner = 2;
+    bytes fee_asset_id = 3;
 }
 
 message SettleTransactionData {
-
+    Recipient sender_address = 1;
 }
 
 message WithdrawTransactionData {
-
+    Recipient from_miner = 1;
+    Amount amount = 2;
+    bytes fee_asset_id = 3;
 }
