@@ -32,6 +32,7 @@ message Transaction {
         BindApiKeyTransactionData bind_api_key = 108;
         SettleTransactionData settle = 109;
         WithdrawTransactionData withdraw = 110;
+        UpdateCollateralTransactionData update_collateral = 111;
     };
 };
 
@@ -75,6 +76,16 @@ message CommitToGenerationTransactionData {
 message StartBoostTransactionData {
     Recipient validator = 1;
     bytes tdx_quote = 2;
+    uint32 generation_period_start = 3;
+}
+
+message UpdateCollateralTransactionData {
+    optional bytes root_ca_crl = 1;
+    optional bytes pck_crl = 2;
+    optional bytes tcb_info = 3;
+    optional bytes qe_identity = 4;
+    optional bytes tcb_signing_issuer_chain = 5;
+    optional bytes pck_ca_issuer_chain = 6;
 }
 
 message BindApiKeyTransactionData {
