@@ -100,7 +100,15 @@ message ReserveTransactionData {
 }
 
 message SettleTransactionData {
-    Recipient sender_address = 1;
+    // Reconstructed from the node's PBTransactions usage (node PR #33); field numbers follow constructor order.
+    bytes enclave_public_key = 1;
+    repeated Settlement settlements = 2;
+    bytes enclave_signature = 3;
+
+    message Settlement {
+        Recipient client = 1;
+        Amount cumulative_spent = 2;
+    }
 }
 
 message WithdrawTransactionData {
