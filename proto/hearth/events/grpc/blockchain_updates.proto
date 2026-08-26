@@ -2,7 +2,7 @@ syntax = "proto3";
 package hearth.events.grpc;
 option java_package = "tech.hearth.events.api.grpc.protobuf";
 option csharp_namespace = "Waves.Events.Grpc";
-option go_package = "github.com/wavesplatform/gowaves/pkg/grpc/generated/hearth/events/grpc";
+option go_package = "github.com/hearthchain/protobuf-schemas/gen/go/hearth/events/grpc";
 
 import "hearth/events/events.proto";
 

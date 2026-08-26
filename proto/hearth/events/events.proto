@@ -1,7 +1,7 @@
 syntax = "proto3";
 package hearth.events;
 option java_package = "tech.hearth.events.protobuf";
-option go_package = "github.com/wavesplatform/gowaves/pkg/grpc/generated/hearth/events";
+option go_package = "github.com/hearthchain/protobuf-schemas/gen/go/hearth/events";
 
 import "hearth/block.proto";
 import "hearth/amount.proto";
@@ -63,11 +63,36 @@ message StateUpdate {
     repeated LeasingUpdate leasing_for_address = 2;
     repeated AssetStateUpdate assets = 4;
     repeated LeaseUpdate individual_leases = 5;
+    repeated ReserveUpdate reserves = 7;
+    repeated SettleUpdate settlements = 8;
 
     message BalanceUpdate {
         bytes address = 1;
         Amount amount_after = 2;
         int64 amount_before = 3;
+    }
+
+    /*
+    A change of the amount a client has reserved against one operator, keyed the way the node keys its
+    reservation state: (client, operator, asset). `operator` is the address that Reserve names in its
+    `miner` field, which is the account settling for the enclave, not the enclave's validator.
+    */
+    message ReserveUpdate {
+        bytes client = 1;
+        bytes operator = 2;
+        Amount amount_after = 3;
+        int64 amount_before = 4;
+    }
+
+    /*
+    A change of the cumulative amount settled between a client and an operator, same key as ReserveUpdate.
+    Both values are cumulative totals, not per-settlement deltas.
+    */
+    message SettleUpdate {
+        bytes client = 1;
+        bytes operator = 2;
+        Amount settled_after = 3;
+        int64 settled_before = 4;
     }
 
     message LeasingUpdate {
