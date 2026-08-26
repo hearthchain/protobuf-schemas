@@ -86,7 +86,23 @@ hearth-protobuf-schemas = { git = "https://github.com/hearthchain/protobuf-schem
 Code is generated at build time with `prost-build`/`tonic-build` using `protox`, so no
 system `protoc` installation is required.
 
+## Go
+Add the module to your `go.mod`:
+```
+go get github.com/hearthchain/protobuf-schemas
+```
+
+Generated packages live under `gen/go` and are committed, so consumers need no protoc:
+`gen/go/hearth` (messages), `gen/go/hearth/events` (state updates), and
+`gen/go/hearth/events/grpc` (the blockchain-updates service client). The node gRPC APIs
+under `proto/hearth/node/grpc` are not generated for Go yet.
+
 # How to generate sources locally
+
+## Go
+Run `./gen-go.sh` after changing a schema and commit the regenerated `gen/go`. It needs
+`protoc`, `protoc-gen-go` and `protoc-gen-go-grpc` on `PATH` (the script prints the
+`go install` lines for the pinned plugin versions).
 
 ## Java
 Use `mvn package` to create JAR artifacts:

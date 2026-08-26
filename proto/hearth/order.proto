@@ -2,7 +2,7 @@ syntax = "proto3";
 package hearth;
 option java_package = "tech.hearth.protobuf.order";
 option csharp_namespace = "Hearth";
-option go_package = "github.com/hearthchain/node-go/pkg/grpc/generated/hearth";
+option go_package = "github.com/hearthchain/protobuf-schemas/gen/go/hearth";
 
 import "hearth/amount.proto";
 
