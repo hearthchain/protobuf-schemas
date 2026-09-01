@@ -23,7 +23,7 @@ message Order {
         ASSET_DECIMALS = 2;
     };
 
-    int32 chain_id = 1;
+    string network_id = 1;
     bytes sender_public_key = 2;
     bytes matcher_public_key = 3;
     AssetPair asset_pair = 4;

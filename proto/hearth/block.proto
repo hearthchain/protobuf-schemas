@@ -19,7 +19,7 @@ message Block {
             FinalizationVoting finalization_voting = 9;
         }
 
-        int32 chain_id = 1;
+        string network_id = 1;
         bytes reference = 2;
         int64 base_target = 3;
         bytes generation_signature = 4;
