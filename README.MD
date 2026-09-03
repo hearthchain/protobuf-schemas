@@ -1,5 +1,5 @@
 # About
-Waves protobuf schemas repository
+Hearth protobuf schemas repository
 
 # How to use
 ## Java
@@ -30,26 +30,26 @@ resolvers += Resolver.sonatypeRepo("snapshots")
 ```
 See [ScalaPB docs](https://scalapb.github.io/docs/third-party-protos) for more info.
 ## JavaScript
-Npm package: `@waves/protobuf-serialization`.
+Npm package: `@hearth/protobuf-serialization`.
 
 It contains generated JavaScript classes, TypeScript definitions as well as raw proto files. The default build uses CommonJS and includes all of the proto files. We used `pbjs` to build JavaScript and `pbts` to build TypeScript definitions.
 
-You could also make your own custom build from raw `.proto` files, for example, if you want to use only a subset of proto schemas or gRPC services. They can be found in `@waves/protobuf-serialization/proto` directory.
+You could also make your own custom build from raw `.proto` files, for example, if you want to use only a subset of proto schemas or gRPC services. They can be found in `@hearth/protobuf-serialization/proto` directory.
 
 `long.js` is used for 64-bit integers: `int64`, `uint64`, etc.
 
 Example:
-1. `npm install --save @waves/protobuf-serialization`
+1. `npm install --save @hearth/protobuf-serialization`
 2. Default build usage
 ```javascript
-import { waves } from '@waves/protobuf-serialization';
+import { hearth } from '@hearth/protobuf-serialization';
 
-const block = new waves.Block();
+const block = new hearth.Block();
 block.header = // ... set necessary fields
 
-const buffer = waves.Block.encode(block);
+const buffer = hearth.Block.encode(block);
 
-const blockDecoded = waves.Block.decode(buffer);
+const blockDecoded = hearth.Block.decode(buffer);
 ```
 
 ## C#
@@ -57,9 +57,9 @@ const blockDecoded = waves.Block.decode(buffer);
 2. Add 
 ```
   <ItemGroup>
-    <Protobuf Include="proto\waves\*.proto" OutputDir="waves\%(RelativePath)" GrpcServices="None" />
-    <Protobuf Include="proto\waves\events\*.proto" OutputDir="waves\events\%(RelativePath)" GrpcServices="None" />
-    <Protobuf Include="proto\waves\node\grpc\*.proto" OutputDir="waves\node\grpc\%(RelativePath)" GrpcServices="Both" />
+    <Protobuf Include="proto\hearth\*.proto" OutputDir="hearth\%(RelativePath)" GrpcServices="None" />
+    <Protobuf Include="proto\hearth\events\*.proto" OutputDir="hearth\events\%(RelativePath)" GrpcServices="None" />
+    <Protobuf Include="proto\hearth\node\grpc\*.proto" OutputDir="hearth\node\grpc\%(RelativePath)" GrpcServices="Both" />
   </ItemGroup>
 ```
 to your `.csproj` file. After this just build your project.
@@ -67,7 +67,7 @@ to your `.csproj` file. After this just build your project.
 or as alternative you can use util protoc, for example:
 ``` protoc --csharp_out=RelativePath  --proto_path=RelativePathToProtoDir RelativePathToProtoFile```
 
-Also there is a NuGet package WavesPlatform.ProtobufSchema with this project.
+Also there is a NuGet package Hearth.ProtobufSchema with this project.
 
 ## Rust
 Add dependency to your `Cargo.toml`
@@ -115,18 +115,18 @@ Generating python sources requires python 3 or later. Run the following commands
 python3 -m venv .venv
 . .venv/bin/activate
 pip install grpcio grpcio-tools base58
-git clone https://github.com/wavesplatform/protobuf-schemas.git
+git clone https://github.com/hearthchain/protobuf-schemas.git
 python -m grpc_tools.protoc --proto_path=./protobuf-schemas/proto --python_out=. --grpc_python_out=. `find ./protobuf-schemas/proto -type f`
 ```
 Tweak `--python_out` and `--grpc_python_out` parameters to generate files elsewhere. Target path should likely be absolute. Now you can use generated classes:
 ```python
 import grpc
-from waves.events.grpc.blockchain_updates_pb2_grpc import BlockchainUpdatesApiStub
-from waves.events.grpc.blockchain_updates_pb2 import SubscribeRequest
+from hearth.events.grpc.blockchain_updates_pb2_grpc import BlockchainUpdatesApiStub
+from hearth.events.grpc.blockchain_updates_pb2 import SubscribeRequest
 from base58 import b58encode, b58decode
 
 def asset_id(asset_id_bytes):
-    return len(asset_id_bytes) > 0 and b58encode(asset_id_bytes) or 'WAVES'
+    return len(asset_id_bytes) > 0 and b58encode(asset_id_bytes) or 'HEARTH'
 
 def print_update(update):
     update_id = b58encode(update.id)
@@ -136,7 +136,7 @@ def print_update(update):
         for balance in tx_state_update.balances:
             print(f'    {b58encode(balance.address)}: {balance.amount_before} -> {balance.amount_after.amount} [{asset_id(balance.amount_after.asset_id)}]')
 
-with grpc.insecure_channel('grpc.wavesnodes.com:6881') as channel:
+with grpc.insecure_channel('grpc.hearthnodes.com:6881') as channel:
     for block in BlockchainUpdatesApiStub(channel).Subscribe(SubscribeRequest(from_height=3135450, to_height=3135470)):
         print_update(block.update)
 ```

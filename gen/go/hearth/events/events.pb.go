@@ -617,14 +617,14 @@ func (x *BlockchainUpdated_Rollback) GetDeactivatedFeatures() []int32 {
 }
 
 type BlockchainUpdated_Append_BlockAppend struct {
-	state              protoimpl.MessageState `protogen:"open.v1"`
-	Block              *hearth.Block          `protobuf:"bytes,1,opt,name=block,proto3" json:"block,omitempty"`
-	UpdatedWavesAmount int64                  `protobuf:"varint,2,opt,name=updated_waves_amount,json=updatedWavesAmount,proto3" json:"updated_waves_amount,omitempty"`
-	ActivatedFeatures  []int32                `protobuf:"varint,3,rep,packed,name=activated_features,json=activatedFeatures,proto3" json:"activated_features,omitempty"`
-	Vrf                []byte                 `protobuf:"bytes,4,opt,name=vrf,proto3" json:"vrf,omitempty"`
-	RewardShares       []*hearth.RewardShare  `protobuf:"bytes,5,rep,name=reward_shares,json=rewardShares,proto3" json:"reward_shares,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	state               protoimpl.MessageState `protogen:"open.v1"`
+	Block               *hearth.Block          `protobuf:"bytes,1,opt,name=block,proto3" json:"block,omitempty"`
+	UpdatedHearthAmount int64                  `protobuf:"varint,2,opt,name=updated_hearth_amount,json=updatedHearthAmount,proto3" json:"updated_hearth_amount,omitempty"`
+	ActivatedFeatures   []int32                `protobuf:"varint,3,rep,packed,name=activated_features,json=activatedFeatures,proto3" json:"activated_features,omitempty"`
+	Vrf                 []byte                 `protobuf:"bytes,4,opt,name=vrf,proto3" json:"vrf,omitempty"`
+	RewardShares        []*hearth.RewardShare  `protobuf:"bytes,5,rep,name=reward_shares,json=rewardShares,proto3" json:"reward_shares,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *BlockchainUpdated_Append_BlockAppend) Reset() {
@@ -664,9 +664,9 @@ func (x *BlockchainUpdated_Append_BlockAppend) GetBlock() *hearth.Block {
 	return nil
 }
 
-func (x *BlockchainUpdated_Append_BlockAppend) GetUpdatedWavesAmount() int64 {
+func (x *BlockchainUpdated_Append_BlockAppend) GetUpdatedHearthAmount() int64 {
 	if x != nil {
-		return x.UpdatedWavesAmount
+		return x.UpdatedHearthAmount
 	}
 	return 0
 }
@@ -1733,13 +1733,13 @@ var File_hearth_events_events_proto protoreflect.FileDescriptor
 
 const file_hearth_events_events_proto_rawDesc = "" +
 	"\n" +
-	"\x1ahearth/events/events.proto\x12\rhearth.events\x1a\x12hearth/block.proto\x1a\x13hearth/amount.proto\x1a\x19hearth/reward_share.proto\"\xdd\v\n" +
+	"\x1ahearth/events/events.proto\x12\rhearth.events\x1a\x12hearth/block.proto\x1a\x13hearth/amount.proto\x1a\x19hearth/reward_share.proto\"\xdf\v\n" +
 	"\x11BlockchainUpdated\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\fR\x02id\x12\x16\n" +
 	"\x06height\x18\x02 \x01(\x05R\x06height\x12A\n" +
 	"\x06append\x18\v \x01(\v2'.hearth.events.BlockchainUpdated.AppendH\x00R\x06append\x12G\n" +
 	"\brollback\x18\f \x01(\v2).hearth.events.BlockchainUpdated.RollbackH\x00R\brollback\x12Q\n" +
-	"\x11referenced_assets\x18\x15 \x03(\v2$.hearth.events.StateUpdate.AssetInfoR\x10referencedAssets\x1a\xc1\x06\n" +
+	"\x11referenced_assets\x18\x15 \x03(\v2$.hearth.events.StateUpdate.AssetInfoR\x10referencedAssets\x1a\xc3\x06\n" +
 	"\x06Append\x12K\n" +
 	"\x05block\x18\x01 \x01(\v23.hearth.events.BlockchainUpdated.Append.BlockAppendH\x00R\x05block\x12[\n" +
 	"\vmicro_block\x18\x02 \x01(\v28.hearth.events.BlockchainUpdated.Append.MicroBlockAppendH\x00R\n" +
@@ -1747,10 +1747,10 @@ const file_hearth_events_events_proto_rawDesc = "" +
 	"\x0ftransaction_ids\x18\x03 \x03(\fR\x0etransactionIds\x12W\n" +
 	"\x15transactions_metadata\x18\x04 \x03(\v2\".hearth.events.TransactionMetadataR\x14transactionsMetadata\x12=\n" +
 	"\fstate_update\x18\v \x01(\v2\x1a.hearth.events.StateUpdateR\vstateUpdate\x12V\n" +
-	"\x19transaction_state_updates\x18\f \x03(\v2\x1a.hearth.events.StateUpdateR\x17transactionStateUpdates\x1a\xdf\x01\n" +
+	"\x19transaction_state_updates\x18\f \x03(\v2\x1a.hearth.events.StateUpdateR\x17transactionStateUpdates\x1a\xe1\x01\n" +
 	"\vBlockAppend\x12#\n" +
-	"\x05block\x18\x01 \x01(\v2\r.hearth.BlockR\x05block\x120\n" +
-	"\x14updated_waves_amount\x18\x02 \x01(\x03R\x12updatedWavesAmount\x12-\n" +
+	"\x05block\x18\x01 \x01(\v2\r.hearth.BlockR\x05block\x122\n" +
+	"\x15updated_hearth_amount\x18\x02 \x01(\x03R\x13updatedHearthAmount\x12-\n" +
 	"\x12activated_features\x18\x03 \x03(\x05R\x11activatedFeatures\x12\x10\n" +
 	"\x03vrf\x18\x04 \x01(\fR\x03vrf\x128\n" +
 	"\rreward_shares\x18\x05 \x03(\v2\x13.hearth.RewardShareR\frewardShares\x1a\x89\x01\n" +

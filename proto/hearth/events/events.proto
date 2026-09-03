@@ -14,7 +14,7 @@ message BlockchainUpdated {
     message Append {
         message BlockAppend {
             Block block = 1;
-            int64 updated_waves_amount = 2;
+            int64 updated_hearth_amount = 2;
             repeated int32 activated_features = 3;
             bytes vrf = 4;
             repeated RewardShare reward_shares = 5;

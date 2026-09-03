@@ -1,5 +1,5 @@
 {
-  "name": "@waves/protobuf-serialization",
+  "name": "@hearth/protobuf-serialization",
   "version": "1.6.2",
   "description": "Generated types and methods for encoding and decoding protobuf messages as well as working with gRPC services.",
   "main": "dist/index.js",
@@ -16,14 +16,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wavesplatform/protobuf-schemas.git"
+    "url": "git+https://github.com/hearthchain/protobuf-schemas.git"
   },
   "author": "Dmitry Shuranov <dvshur@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/wavesplatform/protobuf-schemas/issues"
+    "url": "https://github.com/hearthchain/protobuf-schemas/issues"
   },
-  "homepage": "https://github.com/wavesplatform/protobuf-schemas#readme",
+  "homepage": "https://github.com/hearthchain/protobuf-schemas#readme",
   "dependencies": {
     "protobufjs": "^8.0.1"
   },

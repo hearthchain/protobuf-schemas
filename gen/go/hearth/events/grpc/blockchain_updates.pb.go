@@ -329,8 +329,8 @@ const file_hearth_events_grpc_blockchain_updates_proto_rawDesc = "" +
 	"\x14BlockchainUpdatesApi\x12g\n" +
 	"\x0eGetBlockUpdate\x12).hearth.events.grpc.GetBlockUpdateRequest\x1a*.hearth.events.grpc.GetBlockUpdateResponse\x12y\n" +
 	"\x14GetBlockUpdatesRange\x12/.hearth.events.grpc.GetBlockUpdatesRangeRequest\x1a0.hearth.events.grpc.GetBlockUpdatesRangeResponse\x12W\n" +
-	"\tSubscribe\x12$.hearth.events.grpc.SubscribeRequest\x1a\".hearth.events.grpc.SubscribeEvent0\x01B}\n" +
-	"$tech.hearth.events.api.grpc.protobufZAgithub.com/hearthchain/protobuf-schemas/gen/go/hearth/events/grpc\xaa\x02\x11Waves.Events.Grpcb\x06proto3"
+	"\tSubscribe\x12$.hearth.events.grpc.SubscribeRequest\x1a\".hearth.events.grpc.SubscribeEvent0\x01B~\n" +
+	"$tech.hearth.events.api.grpc.protobufZAgithub.com/hearthchain/protobuf-schemas/gen/go/hearth/events/grpc\xaa\x02\x12Hearth.Events.Grpcb\x06proto3"
 
 var (
 	file_hearth_events_grpc_blockchain_updates_proto_rawDescOnce sync.Once

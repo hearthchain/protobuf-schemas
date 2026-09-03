@@ -1,8 +1,8 @@
 syntax = "proto3";
 package hearth.node.grpc;
 option java_package = "tech.hearth.api.grpc";
-option csharp_namespace = "Waves.Node.Grpc";
-option go_package = "github.com/wavesplatform/gowaves/pkg/grpc/generated/hearth/node/grpc";
+option csharp_namespace = "Hearth.Node.Grpc";
+option go_package = "github.com/hearthchain/node-go/pkg/grpc/generated/hearth/node/grpc";
 
 import "hearth/amount.proto";
 import "hearth/recipient.proto";
@@ -22,7 +22,7 @@ message BalancesRequest {
 }
 
 message BalanceResponse {
-    message WavesBalances {
+    message HearthBalances {
         int64 regular = 1;
         int64 generating = 2;
         int64 available = 3;
@@ -32,7 +32,7 @@ message BalanceResponse {
     }
 
     oneof balance {
-        WavesBalances waves = 1;
+        HearthBalances hearth = 1;
         Amount asset = 2;
     }
 }

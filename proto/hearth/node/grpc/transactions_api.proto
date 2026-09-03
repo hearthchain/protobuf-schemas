@@ -1,8 +1,8 @@
 syntax = "proto3";
 package hearth.node.grpc;
 option java_package = "tech.hearth.api.grpc";
-option csharp_namespace = "Waves.Node.Grpc";
-option go_package = "github.com/wavesplatform/gowaves/pkg/grpc/generated/hearth/node/grpc";
+option csharp_namespace = "Hearth.Node.Grpc";
+option go_package = "github.com/hearthchain/node-go/pkg/grpc/generated/hearth/node/grpc";
 
 import "hearth/recipient.proto";
 import "hearth/transaction.proto";

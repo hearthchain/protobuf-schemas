@@ -64,9 +64,9 @@
   <Protobuf_NoWarnMissingExpected>true</Protobuf_NoWarnMissingExpected>
 </PropertyGroup>
   <ItemGroup>
-    <Protobuf Include="..\proto\waves\*.proto" OutputDir="waves\%(RelativePath)" GrpcServices="None" />
-    <Protobuf Include="waves\events\*.proto" OutputDir="waves\events\%(RelativePath)" GrpcServices="None" />
-    <Protobuf Include="waves\node\grpc\*.proto" OutputDir="waves\node\grpc\%(RelativePath)" GrpcServices="Both" />
+    <Protobuf Include="..\proto\hearth\*.proto" OutputDir="hearth\%(RelativePath)" GrpcServices="None" />
+    <Protobuf Include="hearth\events\*.proto" OutputDir="hearth\events\%(RelativePath)" GrpcServices="None" />
+    <Protobuf Include="hearth\node\grpc\*.proto" OutputDir="hearth\node\grpc\%(RelativePath)" GrpcServices="Both" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Grpc.Core.1.22.0\build\net45\Grpc.Core.targets" Condition="Exists('..\packages\Grpc.Core.1.22.0\build\net45\Grpc.Core.targets')" />

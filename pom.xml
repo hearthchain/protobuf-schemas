@@ -15,9 +15,9 @@
     <packaging>jar</packaging>
     <version>0.1.0-SNAPSHOT</version>
 
-    <name>Waves Node protobuf classes</name>
-    <description>Waves Node protobuf java classes</description>
-    <url>https://github.com/wavesplatform/protobuf-schemas</url>
+    <name>Hearth Node protobuf classes</name>
+    <description>Hearth Node protobuf java classes</description>
+    <url>https://github.com/hearthchain/protobuf-schemas</url>
 
     <licenses>
         <license>
@@ -28,16 +28,16 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/wavesplatform/protobuf-schemas</url>
+        <url>https://github.com/hearthchain/protobuf-schemas</url>
     </scm>
 
     <developers>
         <developer>
-            <id>vgavrilin</id>
-            <name>Valeriy Gavrilin</name>
-            <email>vgavrilin@wavesplatform.com</email>
-            <organization>Waves</organization>
-            <organizationUrl>https://wavesplatform.com</organizationUrl>
+            <id>hearth-team</id>
+            <name>Hearth Team</name>
+            <email>dev@hearth.tech</email>
+            <organization>Hearth Chain</organization>
+            <organizationUrl>https://hearth.tech</organizationUrl>
             <roles>
                 <role>Developer</role>
             </roles>
