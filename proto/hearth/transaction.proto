@@ -33,6 +33,7 @@ message Transaction {
         SettleTransactionData settle = 109;
         WithdrawTransactionData withdraw = 110;
         UpdateCollateralTransactionData update_collateral = 111;
+        StakeTransactionData stake = 112;
     };
 };
 
@@ -115,4 +116,19 @@ message WithdrawTransactionData {
     Recipient from_miner = 1;
     Amount amount = 2;
     bytes fee_asset_id = 3;
+}
+
+// Stakes HRTH from the sender, starting with the generation period beginning at period_start.
+//
+// period_start must be the start height of the period *following* the one the transaction is applied in: a stake
+// never takes effect in the epoch it is sent in. The HRTH is locked immediately on acceptance, but earns nothing
+// until period_start, and from then on it earns for every period until another StakeTransactionData changes it.
+// Several of these in one period are allowed and the last one applied wins.
+//
+// amount is the new total staked, not a delta, and may be 0: that releases everything currently staked at the start
+// of period_start. It is therefore an int64 rather than an Amount - a stake is always denominated in HRTH, and 0 is
+// a meaningful value here, unlike everywhere else a transaction carries an amount.
+message StakeTransactionData {
+    uint32 period_start = 1;
+    int64 amount = 2;
 }
