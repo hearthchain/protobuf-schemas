@@ -111,7 +111,7 @@ func (x StateUpdate_LeaseUpdate_LeaseStatus) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use StateUpdate_LeaseUpdate_LeaseStatus.Descriptor instead.
 func (StateUpdate_LeaseUpdate_LeaseStatus) EnumDescriptor() ([]byte, []int) {
-	return file_hearth_events_events_proto_rawDescGZIP(), []int{1, 4, 0}
+	return file_hearth_events_events_proto_rawDescGZIP(), []int{1, 5, 0}
 }
 
 type BlockchainUpdated struct {
@@ -228,6 +228,7 @@ type StateUpdate struct {
 	IndividualLeases  []*StateUpdate_LeaseUpdate      `protobuf:"bytes,5,rep,name=individual_leases,json=individualLeases,proto3" json:"individual_leases,omitempty"`
 	Reserves          []*StateUpdate_ReserveUpdate    `protobuf:"bytes,7,rep,name=reserves,proto3" json:"reserves,omitempty"`
 	Settlements       []*StateUpdate_SettleUpdate     `protobuf:"bytes,8,rep,name=settlements,proto3" json:"settlements,omitempty"`
+	StakingPayout     *StateUpdate_StakingPayout      `protobuf:"bytes,9,opt,name=staking_payout,json=stakingPayout,proto3" json:"staking_payout,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -300,6 +301,13 @@ func (x *StateUpdate) GetReserves() []*StateUpdate_ReserveUpdate {
 func (x *StateUpdate) GetSettlements() []*StateUpdate_SettleUpdate {
 	if x != nil {
 		return x.Settlements
+	}
+	return nil
+}
+
+func (x *StateUpdate) GetStakingPayout() *StateUpdate_StakingPayout {
+	if x != nil {
+		return x.StakingPayout
 	}
 	return nil
 }
@@ -945,6 +953,95 @@ func (x *StateUpdate_SettleUpdate) GetSettledBefore() int64 {
 	return 0
 }
 
+// What stakers were paid for one finished generation period. Carried only by the state update of the first block
+// of the next period, the one that mints the Cred; the credited amounts also appear in `balances` as ordinary
+// balance changes of `asset_id`. In a rollback state update it means the payout was undone.
+type StateUpdate_StakingPayout struct {
+	state       protoimpl.MessageState `protogen:"open.v1"`
+	PeriodStart int32                  `protobuf:"varint,1,opt,name=period_start,json=periodStart,proto3" json:"period_start,omitempty"`
+	PeriodEnd   int32                  `protobuf:"varint,2,opt,name=period_end,json=periodEnd,proto3" json:"period_end,omitempty"`
+	AssetId     []byte                 `protobuf:"bytes,3,opt,name=asset_id,json=assetId,proto3" json:"asset_id,omitempty"`
+	// The period's total tracked work, which is what was split between the stakers.
+	Issued int64 `protobuf:"varint,4,opt,name=issued,proto3" json:"issued,omitempty"`
+	// Sum of `staked` over `payouts`. Encoding: like Java BigInteger#toByteArray, see AssetDetails.safe_volume.
+	TotalStaked   []byte                              `protobuf:"bytes,5,opt,name=total_staked,json=totalStaked,proto3" json:"total_staked,omitempty"`
+	Payouts       []*StateUpdate_StakingPayout_Payout `protobuf:"bytes,6,rep,name=payouts,proto3" json:"payouts,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *StateUpdate_StakingPayout) Reset() {
+	*x = StateUpdate_StakingPayout{}
+	mi := &file_hearth_events_events_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StateUpdate_StakingPayout) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StateUpdate_StakingPayout) ProtoMessage() {}
+
+func (x *StateUpdate_StakingPayout) ProtoReflect() protoreflect.Message {
+	mi := &file_hearth_events_events_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StateUpdate_StakingPayout.ProtoReflect.Descriptor instead.
+func (*StateUpdate_StakingPayout) Descriptor() ([]byte, []int) {
+	return file_hearth_events_events_proto_rawDescGZIP(), []int{1, 3}
+}
+
+func (x *StateUpdate_StakingPayout) GetPeriodStart() int32 {
+	if x != nil {
+		return x.PeriodStart
+	}
+	return 0
+}
+
+func (x *StateUpdate_StakingPayout) GetPeriodEnd() int32 {
+	if x != nil {
+		return x.PeriodEnd
+	}
+	return 0
+}
+
+func (x *StateUpdate_StakingPayout) GetAssetId() []byte {
+	if x != nil {
+		return x.AssetId
+	}
+	return nil
+}
+
+func (x *StateUpdate_StakingPayout) GetIssued() int64 {
+	if x != nil {
+		return x.Issued
+	}
+	return 0
+}
+
+func (x *StateUpdate_StakingPayout) GetTotalStaked() []byte {
+	if x != nil {
+		return x.TotalStaked
+	}
+	return nil
+}
+
+func (x *StateUpdate_StakingPayout) GetPayouts() []*StateUpdate_StakingPayout_Payout {
+	if x != nil {
+		return x.Payouts
+	}
+	return nil
+}
+
 type StateUpdate_LeasingUpdate struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Address       []byte                 `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
@@ -958,7 +1055,7 @@ type StateUpdate_LeasingUpdate struct {
 
 func (x *StateUpdate_LeasingUpdate) Reset() {
 	*x = StateUpdate_LeasingUpdate{}
-	mi := &file_hearth_events_events_proto_msgTypes[10]
+	mi := &file_hearth_events_events_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -970,7 +1067,7 @@ func (x *StateUpdate_LeasingUpdate) String() string {
 func (*StateUpdate_LeasingUpdate) ProtoMessage() {}
 
 func (x *StateUpdate_LeasingUpdate) ProtoReflect() protoreflect.Message {
-	mi := &file_hearth_events_events_proto_msgTypes[10]
+	mi := &file_hearth_events_events_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -983,7 +1080,7 @@ func (x *StateUpdate_LeasingUpdate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StateUpdate_LeasingUpdate.ProtoReflect.Descriptor instead.
 func (*StateUpdate_LeasingUpdate) Descriptor() ([]byte, []int) {
-	return file_hearth_events_events_proto_rawDescGZIP(), []int{1, 3}
+	return file_hearth_events_events_proto_rawDescGZIP(), []int{1, 4}
 }
 
 func (x *StateUpdate_LeasingUpdate) GetAddress() []byte {
@@ -1035,7 +1132,7 @@ type StateUpdate_LeaseUpdate struct {
 
 func (x *StateUpdate_LeaseUpdate) Reset() {
 	*x = StateUpdate_LeaseUpdate{}
-	mi := &file_hearth_events_events_proto_msgTypes[11]
+	mi := &file_hearth_events_events_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1047,7 +1144,7 @@ func (x *StateUpdate_LeaseUpdate) String() string {
 func (*StateUpdate_LeaseUpdate) ProtoMessage() {}
 
 func (x *StateUpdate_LeaseUpdate) ProtoReflect() protoreflect.Message {
-	mi := &file_hearth_events_events_proto_msgTypes[11]
+	mi := &file_hearth_events_events_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1060,7 +1157,7 @@ func (x *StateUpdate_LeaseUpdate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StateUpdate_LeaseUpdate.ProtoReflect.Descriptor instead.
 func (*StateUpdate_LeaseUpdate) Descriptor() ([]byte, []int) {
-	return file_hearth_events_events_proto_rawDescGZIP(), []int{1, 4}
+	return file_hearth_events_events_proto_rawDescGZIP(), []int{1, 5}
 }
 
 func (x *StateUpdate_LeaseUpdate) GetLeaseId() []byte {
@@ -1115,7 +1212,7 @@ type StateUpdate_AssetStateUpdate struct {
 
 func (x *StateUpdate_AssetStateUpdate) Reset() {
 	*x = StateUpdate_AssetStateUpdate{}
-	mi := &file_hearth_events_events_proto_msgTypes[12]
+	mi := &file_hearth_events_events_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1127,7 +1224,7 @@ func (x *StateUpdate_AssetStateUpdate) String() string {
 func (*StateUpdate_AssetStateUpdate) ProtoMessage() {}
 
 func (x *StateUpdate_AssetStateUpdate) ProtoReflect() protoreflect.Message {
-	mi := &file_hearth_events_events_proto_msgTypes[12]
+	mi := &file_hearth_events_events_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1140,7 +1237,7 @@ func (x *StateUpdate_AssetStateUpdate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StateUpdate_AssetStateUpdate.ProtoReflect.Descriptor instead.
 func (*StateUpdate_AssetStateUpdate) Descriptor() ([]byte, []int) {
-	return file_hearth_events_events_proto_rawDescGZIP(), []int{1, 5}
+	return file_hearth_events_events_proto_rawDescGZIP(), []int{1, 6}
 }
 
 func (x *StateUpdate_AssetStateUpdate) GetBefore() *StateUpdate_AssetDetails {
@@ -1184,7 +1281,7 @@ type StateUpdate_AssetDetails struct {
 
 func (x *StateUpdate_AssetDetails) Reset() {
 	*x = StateUpdate_AssetDetails{}
-	mi := &file_hearth_events_events_proto_msgTypes[13]
+	mi := &file_hearth_events_events_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1196,7 +1293,7 @@ func (x *StateUpdate_AssetDetails) String() string {
 func (*StateUpdate_AssetDetails) ProtoMessage() {}
 
 func (x *StateUpdate_AssetDetails) ProtoReflect() protoreflect.Message {
-	mi := &file_hearth_events_events_proto_msgTypes[13]
+	mi := &file_hearth_events_events_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1209,7 +1306,7 @@ func (x *StateUpdate_AssetDetails) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StateUpdate_AssetDetails.ProtoReflect.Descriptor instead.
 func (*StateUpdate_AssetDetails) Descriptor() ([]byte, []int) {
-	return file_hearth_events_events_proto_rawDescGZIP(), []int{1, 6}
+	return file_hearth_events_events_proto_rawDescGZIP(), []int{1, 7}
 }
 
 func (x *StateUpdate_AssetDetails) GetAssetId() []byte {
@@ -1321,7 +1418,7 @@ type StateUpdate_AssetInfo struct {
 
 func (x *StateUpdate_AssetInfo) Reset() {
 	*x = StateUpdate_AssetInfo{}
-	mi := &file_hearth_events_events_proto_msgTypes[14]
+	mi := &file_hearth_events_events_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1333,7 +1430,7 @@ func (x *StateUpdate_AssetInfo) String() string {
 func (*StateUpdate_AssetInfo) ProtoMessage() {}
 
 func (x *StateUpdate_AssetInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_hearth_events_events_proto_msgTypes[14]
+	mi := &file_hearth_events_events_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1346,7 +1443,7 @@ func (x *StateUpdate_AssetInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StateUpdate_AssetInfo.ProtoReflect.Descriptor instead.
 func (*StateUpdate_AssetInfo) Descriptor() ([]byte, []int) {
-	return file_hearth_events_events_proto_rawDescGZIP(), []int{1, 7}
+	return file_hearth_events_events_proto_rawDescGZIP(), []int{1, 8}
 }
 
 func (x *StateUpdate_AssetInfo) GetId() []byte {
@@ -1381,7 +1478,7 @@ type StateUpdate_ScriptUpdate struct {
 
 func (x *StateUpdate_ScriptUpdate) Reset() {
 	*x = StateUpdate_ScriptUpdate{}
-	mi := &file_hearth_events_events_proto_msgTypes[15]
+	mi := &file_hearth_events_events_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1393,7 +1490,7 @@ func (x *StateUpdate_ScriptUpdate) String() string {
 func (*StateUpdate_ScriptUpdate) ProtoMessage() {}
 
 func (x *StateUpdate_ScriptUpdate) ProtoReflect() protoreflect.Message {
-	mi := &file_hearth_events_events_proto_msgTypes[15]
+	mi := &file_hearth_events_events_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1406,7 +1503,7 @@ func (x *StateUpdate_ScriptUpdate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StateUpdate_ScriptUpdate.ProtoReflect.Descriptor instead.
 func (*StateUpdate_ScriptUpdate) Descriptor() ([]byte, []int) {
-	return file_hearth_events_events_proto_rawDescGZIP(), []int{1, 8}
+	return file_hearth_events_events_proto_rawDescGZIP(), []int{1, 9}
 }
 
 func (x *StateUpdate_ScriptUpdate) GetAddress() []byte {
@@ -1430,6 +1527,68 @@ func (x *StateUpdate_ScriptUpdate) GetAfter() []byte {
 	return nil
 }
 
+type StateUpdate_StakingPayout_Payout struct {
+	state   protoimpl.MessageState `protogen:"open.v1"`
+	Address []byte                 `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
+	// The stake in force for the period, in HRTH embers.
+	Staked int64 `protobuf:"varint,2,opt,name=staked,proto3" json:"staked,omitempty"`
+	// Cred credited for it; 0 when the pro-rata share floored to zero.
+	Credited      int64 `protobuf:"varint,3,opt,name=credited,proto3" json:"credited,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *StateUpdate_StakingPayout_Payout) Reset() {
+	*x = StateUpdate_StakingPayout_Payout{}
+	mi := &file_hearth_events_events_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StateUpdate_StakingPayout_Payout) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StateUpdate_StakingPayout_Payout) ProtoMessage() {}
+
+func (x *StateUpdate_StakingPayout_Payout) ProtoReflect() protoreflect.Message {
+	mi := &file_hearth_events_events_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StateUpdate_StakingPayout_Payout.ProtoReflect.Descriptor instead.
+func (*StateUpdate_StakingPayout_Payout) Descriptor() ([]byte, []int) {
+	return file_hearth_events_events_proto_rawDescGZIP(), []int{1, 3, 0}
+}
+
+func (x *StateUpdate_StakingPayout_Payout) GetAddress() []byte {
+	if x != nil {
+		return x.Address
+	}
+	return nil
+}
+
+func (x *StateUpdate_StakingPayout_Payout) GetStaked() int64 {
+	if x != nil {
+		return x.Staked
+	}
+	return 0
+}
+
+func (x *StateUpdate_StakingPayout_Payout) GetCredited() int64 {
+	if x != nil {
+		return x.Credited
+	}
+	return 0
+}
+
 type StateUpdate_AssetDetails_AssetScriptInfo struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Script        []byte                 `protobuf:"bytes,1,opt,name=script,proto3" json:"script,omitempty"`
@@ -1440,7 +1599,7 @@ type StateUpdate_AssetDetails_AssetScriptInfo struct {
 
 func (x *StateUpdate_AssetDetails_AssetScriptInfo) Reset() {
 	*x = StateUpdate_AssetDetails_AssetScriptInfo{}
-	mi := &file_hearth_events_events_proto_msgTypes[16]
+	mi := &file_hearth_events_events_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1452,7 +1611,7 @@ func (x *StateUpdate_AssetDetails_AssetScriptInfo) String() string {
 func (*StateUpdate_AssetDetails_AssetScriptInfo) ProtoMessage() {}
 
 func (x *StateUpdate_AssetDetails_AssetScriptInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_hearth_events_events_proto_msgTypes[16]
+	mi := &file_hearth_events_events_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1465,7 +1624,7 @@ func (x *StateUpdate_AssetDetails_AssetScriptInfo) ProtoReflect() protoreflect.M
 
 // Deprecated: Use StateUpdate_AssetDetails_AssetScriptInfo.ProtoReflect.Descriptor instead.
 func (*StateUpdate_AssetDetails_AssetScriptInfo) Descriptor() ([]byte, []int) {
-	return file_hearth_events_events_proto_rawDescGZIP(), []int{1, 6, 0}
+	return file_hearth_events_events_proto_rawDescGZIP(), []int{1, 7, 0}
 }
 
 func (x *StateUpdate_AssetDetails_AssetScriptInfo) GetScript() []byte {
@@ -1491,7 +1650,7 @@ type TransactionMetadata_TransferMetadata struct {
 
 func (x *TransactionMetadata_TransferMetadata) Reset() {
 	*x = TransactionMetadata_TransferMetadata{}
-	mi := &file_hearth_events_events_proto_msgTypes[17]
+	mi := &file_hearth_events_events_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1503,7 +1662,7 @@ func (x *TransactionMetadata_TransferMetadata) String() string {
 func (*TransactionMetadata_TransferMetadata) ProtoMessage() {}
 
 func (x *TransactionMetadata_TransferMetadata) ProtoReflect() protoreflect.Message {
-	mi := &file_hearth_events_events_proto_msgTypes[17]
+	mi := &file_hearth_events_events_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1535,7 +1694,7 @@ type TransactionMetadata_MassTransferMetadata struct {
 
 func (x *TransactionMetadata_MassTransferMetadata) Reset() {
 	*x = TransactionMetadata_MassTransferMetadata{}
-	mi := &file_hearth_events_events_proto_msgTypes[18]
+	mi := &file_hearth_events_events_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1547,7 +1706,7 @@ func (x *TransactionMetadata_MassTransferMetadata) String() string {
 func (*TransactionMetadata_MassTransferMetadata) ProtoMessage() {}
 
 func (x *TransactionMetadata_MassTransferMetadata) ProtoReflect() protoreflect.Message {
-	mi := &file_hearth_events_events_proto_msgTypes[18]
+	mi := &file_hearth_events_events_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1584,7 +1743,7 @@ type TransactionMetadata_ExchangeMetadata struct {
 
 func (x *TransactionMetadata_ExchangeMetadata) Reset() {
 	*x = TransactionMetadata_ExchangeMetadata{}
-	mi := &file_hearth_events_events_proto_msgTypes[19]
+	mi := &file_hearth_events_events_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1596,7 +1755,7 @@ func (x *TransactionMetadata_ExchangeMetadata) String() string {
 func (*TransactionMetadata_ExchangeMetadata) ProtoMessage() {}
 
 func (x *TransactionMetadata_ExchangeMetadata) ProtoReflect() protoreflect.Message {
-	mi := &file_hearth_events_events_proto_msgTypes[19]
+	mi := &file_hearth_events_events_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1642,7 +1801,7 @@ type TransactionMetadata_LeaseMetadata struct {
 
 func (x *TransactionMetadata_LeaseMetadata) Reset() {
 	*x = TransactionMetadata_LeaseMetadata{}
-	mi := &file_hearth_events_events_proto_msgTypes[20]
+	mi := &file_hearth_events_events_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1654,7 +1813,7 @@ func (x *TransactionMetadata_LeaseMetadata) String() string {
 func (*TransactionMetadata_LeaseMetadata) ProtoMessage() {}
 
 func (x *TransactionMetadata_LeaseMetadata) ProtoReflect() protoreflect.Message {
-	mi := &file_hearth_events_events_proto_msgTypes[20]
+	mi := &file_hearth_events_events_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1687,7 +1846,7 @@ type TransactionMetadata_EthereumTransferMetadata struct {
 
 func (x *TransactionMetadata_EthereumTransferMetadata) Reset() {
 	*x = TransactionMetadata_EthereumTransferMetadata{}
-	mi := &file_hearth_events_events_proto_msgTypes[21]
+	mi := &file_hearth_events_events_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1699,7 +1858,7 @@ func (x *TransactionMetadata_EthereumTransferMetadata) String() string {
 func (*TransactionMetadata_EthereumTransferMetadata) ProtoMessage() {}
 
 func (x *TransactionMetadata_EthereumTransferMetadata) ProtoReflect() protoreflect.Message {
-	mi := &file_hearth_events_events_proto_msgTypes[21]
+	mi := &file_hearth_events_events_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1769,14 +1928,15 @@ const file_hearth_events_events_proto_rawDesc = "" +
 	"\x05BLOCK\x10\x00\x12\x0e\n" +
 	"\n" +
 	"MICROBLOCK\x10\x01B\b\n" +
-	"\x06update\"\xdc\x11\n" +
+	"\x06update\"\xfa\x14\n" +
 	"\vStateUpdate\x12D\n" +
 	"\bbalances\x18\x01 \x03(\v2(.hearth.events.StateUpdate.BalanceUpdateR\bbalances\x12X\n" +
 	"\x13leasing_for_address\x18\x02 \x03(\v2(.hearth.events.StateUpdate.LeasingUpdateR\x11leasingForAddress\x12C\n" +
 	"\x06assets\x18\x04 \x03(\v2+.hearth.events.StateUpdate.AssetStateUpdateR\x06assets\x12S\n" +
 	"\x11individual_leases\x18\x05 \x03(\v2&.hearth.events.StateUpdate.LeaseUpdateR\x10individualLeases\x12D\n" +
 	"\breserves\x18\a \x03(\v2(.hearth.events.StateUpdate.ReserveUpdateR\breserves\x12I\n" +
-	"\vsettlements\x18\b \x03(\v2'.hearth.events.StateUpdate.SettleUpdateR\vsettlements\x1a\x81\x01\n" +
+	"\vsettlements\x18\b \x03(\v2'.hearth.events.StateUpdate.SettleUpdateR\vsettlements\x12O\n" +
+	"\x0estaking_payout\x18\t \x01(\v2(.hearth.events.StateUpdate.StakingPayoutR\rstakingPayout\x1a\x81\x01\n" +
 	"\rBalanceUpdate\x12\x18\n" +
 	"\aaddress\x18\x01 \x01(\fR\aaddress\x121\n" +
 	"\famount_after\x18\x02 \x01(\v2\x0e.hearth.AmountR\vamountAfter\x12#\n" +
@@ -1790,7 +1950,19 @@ const file_hearth_events_events_proto_rawDesc = "" +
 	"\x06client\x18\x01 \x01(\fR\x06client\x12\x1a\n" +
 	"\boperator\x18\x02 \x01(\fR\boperator\x123\n" +
 	"\rsettled_after\x18\x03 \x01(\v2\x0e.hearth.AmountR\fsettledAfter\x12%\n" +
-	"\x0esettled_before\x18\x04 \x01(\x03R\rsettledBefore\x1a\x9d\x01\n" +
+	"\x0esettled_before\x18\x04 \x01(\x03R\rsettledBefore\x1a\xca\x02\n" +
+	"\rStakingPayout\x12!\n" +
+	"\fperiod_start\x18\x01 \x01(\x05R\vperiodStart\x12\x1d\n" +
+	"\n" +
+	"period_end\x18\x02 \x01(\x05R\tperiodEnd\x12\x19\n" +
+	"\basset_id\x18\x03 \x01(\fR\aassetId\x12\x16\n" +
+	"\x06issued\x18\x04 \x01(\x03R\x06issued\x12!\n" +
+	"\ftotal_staked\x18\x05 \x01(\fR\vtotalStaked\x12I\n" +
+	"\apayouts\x18\x06 \x03(\v2/.hearth.events.StateUpdate.StakingPayout.PayoutR\apayouts\x1aV\n" +
+	"\x06Payout\x12\x18\n" +
+	"\aaddress\x18\x01 \x01(\fR\aaddress\x12\x16\n" +
+	"\x06staked\x18\x02 \x01(\x03R\x06staked\x12\x1a\n" +
+	"\bcredited\x18\x03 \x01(\x03R\bcredited\x1a\x9d\x01\n" +
 	"\rLeasingUpdate\x12\x18\n" +
 	"\aaddress\x18\x01 \x01(\fR\aaddress\x12\x19\n" +
 	"\bin_after\x18\x02 \x01(\x03R\ainAfter\x12\x1b\n" +
@@ -1882,7 +2054,7 @@ func file_hearth_events_events_proto_rawDescGZIP() []byte {
 }
 
 var file_hearth_events_events_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_hearth_events_events_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
+var file_hearth_events_events_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
 var file_hearth_events_events_proto_goTypes = []any{
 	(BlockchainUpdated_Rollback_RollbackType)(0),         // 0: hearth.events.BlockchainUpdated.Rollback.RollbackType
 	(StateUpdate_LeaseUpdate_LeaseStatus)(0),             // 1: hearth.events.StateUpdate.LeaseUpdate.LeaseStatus
@@ -1896,61 +2068,65 @@ var file_hearth_events_events_proto_goTypes = []any{
 	(*StateUpdate_BalanceUpdate)(nil),                    // 9: hearth.events.StateUpdate.BalanceUpdate
 	(*StateUpdate_ReserveUpdate)(nil),                    // 10: hearth.events.StateUpdate.ReserveUpdate
 	(*StateUpdate_SettleUpdate)(nil),                     // 11: hearth.events.StateUpdate.SettleUpdate
-	(*StateUpdate_LeasingUpdate)(nil),                    // 12: hearth.events.StateUpdate.LeasingUpdate
-	(*StateUpdate_LeaseUpdate)(nil),                      // 13: hearth.events.StateUpdate.LeaseUpdate
-	(*StateUpdate_AssetStateUpdate)(nil),                 // 14: hearth.events.StateUpdate.AssetStateUpdate
-	(*StateUpdate_AssetDetails)(nil),                     // 15: hearth.events.StateUpdate.AssetDetails
-	(*StateUpdate_AssetInfo)(nil),                        // 16: hearth.events.StateUpdate.AssetInfo
-	(*StateUpdate_ScriptUpdate)(nil),                     // 17: hearth.events.StateUpdate.ScriptUpdate
-	(*StateUpdate_AssetDetails_AssetScriptInfo)(nil),     // 18: hearth.events.StateUpdate.AssetDetails.AssetScriptInfo
-	(*TransactionMetadata_TransferMetadata)(nil),         // 19: hearth.events.TransactionMetadata.TransferMetadata
-	(*TransactionMetadata_MassTransferMetadata)(nil),     // 20: hearth.events.TransactionMetadata.MassTransferMetadata
-	(*TransactionMetadata_ExchangeMetadata)(nil),         // 21: hearth.events.TransactionMetadata.ExchangeMetadata
-	(*TransactionMetadata_LeaseMetadata)(nil),            // 22: hearth.events.TransactionMetadata.LeaseMetadata
-	(*TransactionMetadata_EthereumTransferMetadata)(nil), // 23: hearth.events.TransactionMetadata.EthereumTransferMetadata
-	(*hearth.Block)(nil),                                 // 24: hearth.Block
-	(*hearth.RewardShare)(nil),                           // 25: hearth.RewardShare
-	(*hearth.SignedMicroBlock)(nil),                      // 26: hearth.SignedMicroBlock
-	(*hearth.Amount)(nil),                                // 27: hearth.Amount
+	(*StateUpdate_StakingPayout)(nil),                    // 12: hearth.events.StateUpdate.StakingPayout
+	(*StateUpdate_LeasingUpdate)(nil),                    // 13: hearth.events.StateUpdate.LeasingUpdate
+	(*StateUpdate_LeaseUpdate)(nil),                      // 14: hearth.events.StateUpdate.LeaseUpdate
+	(*StateUpdate_AssetStateUpdate)(nil),                 // 15: hearth.events.StateUpdate.AssetStateUpdate
+	(*StateUpdate_AssetDetails)(nil),                     // 16: hearth.events.StateUpdate.AssetDetails
+	(*StateUpdate_AssetInfo)(nil),                        // 17: hearth.events.StateUpdate.AssetInfo
+	(*StateUpdate_ScriptUpdate)(nil),                     // 18: hearth.events.StateUpdate.ScriptUpdate
+	(*StateUpdate_StakingPayout_Payout)(nil),             // 19: hearth.events.StateUpdate.StakingPayout.Payout
+	(*StateUpdate_AssetDetails_AssetScriptInfo)(nil),     // 20: hearth.events.StateUpdate.AssetDetails.AssetScriptInfo
+	(*TransactionMetadata_TransferMetadata)(nil),         // 21: hearth.events.TransactionMetadata.TransferMetadata
+	(*TransactionMetadata_MassTransferMetadata)(nil),     // 22: hearth.events.TransactionMetadata.MassTransferMetadata
+	(*TransactionMetadata_ExchangeMetadata)(nil),         // 23: hearth.events.TransactionMetadata.ExchangeMetadata
+	(*TransactionMetadata_LeaseMetadata)(nil),            // 24: hearth.events.TransactionMetadata.LeaseMetadata
+	(*TransactionMetadata_EthereumTransferMetadata)(nil), // 25: hearth.events.TransactionMetadata.EthereumTransferMetadata
+	(*hearth.Block)(nil),                                 // 26: hearth.Block
+	(*hearth.RewardShare)(nil),                           // 27: hearth.RewardShare
+	(*hearth.SignedMicroBlock)(nil),                      // 28: hearth.SignedMicroBlock
+	(*hearth.Amount)(nil),                                // 29: hearth.Amount
 }
 var file_hearth_events_events_proto_depIdxs = []int32{
 	5,  // 0: hearth.events.BlockchainUpdated.append:type_name -> hearth.events.BlockchainUpdated.Append
 	6,  // 1: hearth.events.BlockchainUpdated.rollback:type_name -> hearth.events.BlockchainUpdated.Rollback
-	16, // 2: hearth.events.BlockchainUpdated.referenced_assets:type_name -> hearth.events.StateUpdate.AssetInfo
+	17, // 2: hearth.events.BlockchainUpdated.referenced_assets:type_name -> hearth.events.StateUpdate.AssetInfo
 	9,  // 3: hearth.events.StateUpdate.balances:type_name -> hearth.events.StateUpdate.BalanceUpdate
-	12, // 4: hearth.events.StateUpdate.leasing_for_address:type_name -> hearth.events.StateUpdate.LeasingUpdate
-	14, // 5: hearth.events.StateUpdate.assets:type_name -> hearth.events.StateUpdate.AssetStateUpdate
-	13, // 6: hearth.events.StateUpdate.individual_leases:type_name -> hearth.events.StateUpdate.LeaseUpdate
+	13, // 4: hearth.events.StateUpdate.leasing_for_address:type_name -> hearth.events.StateUpdate.LeasingUpdate
+	15, // 5: hearth.events.StateUpdate.assets:type_name -> hearth.events.StateUpdate.AssetStateUpdate
+	14, // 6: hearth.events.StateUpdate.individual_leases:type_name -> hearth.events.StateUpdate.LeaseUpdate
 	10, // 7: hearth.events.StateUpdate.reserves:type_name -> hearth.events.StateUpdate.ReserveUpdate
 	11, // 8: hearth.events.StateUpdate.settlements:type_name -> hearth.events.StateUpdate.SettleUpdate
-	19, // 9: hearth.events.TransactionMetadata.transfer:type_name -> hearth.events.TransactionMetadata.TransferMetadata
-	21, // 10: hearth.events.TransactionMetadata.exchange:type_name -> hearth.events.TransactionMetadata.ExchangeMetadata
-	20, // 11: hearth.events.TransactionMetadata.mass_transfer:type_name -> hearth.events.TransactionMetadata.MassTransferMetadata
-	22, // 12: hearth.events.TransactionMetadata.lease:type_name -> hearth.events.TransactionMetadata.LeaseMetadata
-	7,  // 13: hearth.events.BlockchainUpdated.Append.block:type_name -> hearth.events.BlockchainUpdated.Append.BlockAppend
-	8,  // 14: hearth.events.BlockchainUpdated.Append.micro_block:type_name -> hearth.events.BlockchainUpdated.Append.MicroBlockAppend
-	4,  // 15: hearth.events.BlockchainUpdated.Append.transactions_metadata:type_name -> hearth.events.TransactionMetadata
-	3,  // 16: hearth.events.BlockchainUpdated.Append.state_update:type_name -> hearth.events.StateUpdate
-	3,  // 17: hearth.events.BlockchainUpdated.Append.transaction_state_updates:type_name -> hearth.events.StateUpdate
-	0,  // 18: hearth.events.BlockchainUpdated.Rollback.type:type_name -> hearth.events.BlockchainUpdated.Rollback.RollbackType
-	24, // 19: hearth.events.BlockchainUpdated.Rollback.removed_blocks:type_name -> hearth.Block
-	3,  // 20: hearth.events.BlockchainUpdated.Rollback.rollback_state_update:type_name -> hearth.events.StateUpdate
-	24, // 21: hearth.events.BlockchainUpdated.Append.BlockAppend.block:type_name -> hearth.Block
-	25, // 22: hearth.events.BlockchainUpdated.Append.BlockAppend.reward_shares:type_name -> hearth.RewardShare
-	26, // 23: hearth.events.BlockchainUpdated.Append.MicroBlockAppend.micro_block:type_name -> hearth.SignedMicroBlock
-	27, // 24: hearth.events.StateUpdate.BalanceUpdate.amount_after:type_name -> hearth.Amount
-	27, // 25: hearth.events.StateUpdate.ReserveUpdate.amount_after:type_name -> hearth.Amount
-	27, // 26: hearth.events.StateUpdate.SettleUpdate.settled_after:type_name -> hearth.Amount
-	1,  // 27: hearth.events.StateUpdate.LeaseUpdate.status_after:type_name -> hearth.events.StateUpdate.LeaseUpdate.LeaseStatus
-	15, // 28: hearth.events.StateUpdate.AssetStateUpdate.before:type_name -> hearth.events.StateUpdate.AssetDetails
-	15, // 29: hearth.events.StateUpdate.AssetStateUpdate.after:type_name -> hearth.events.StateUpdate.AssetDetails
-	18, // 30: hearth.events.StateUpdate.AssetDetails.script_info:type_name -> hearth.events.StateUpdate.AssetDetails.AssetScriptInfo
-	27, // 31: hearth.events.TransactionMetadata.EthereumTransferMetadata.amount:type_name -> hearth.Amount
-	32, // [32:32] is the sub-list for method output_type
-	32, // [32:32] is the sub-list for method input_type
-	32, // [32:32] is the sub-list for extension type_name
-	32, // [32:32] is the sub-list for extension extendee
-	0,  // [0:32] is the sub-list for field type_name
+	12, // 9: hearth.events.StateUpdate.staking_payout:type_name -> hearth.events.StateUpdate.StakingPayout
+	21, // 10: hearth.events.TransactionMetadata.transfer:type_name -> hearth.events.TransactionMetadata.TransferMetadata
+	23, // 11: hearth.events.TransactionMetadata.exchange:type_name -> hearth.events.TransactionMetadata.ExchangeMetadata
+	22, // 12: hearth.events.TransactionMetadata.mass_transfer:type_name -> hearth.events.TransactionMetadata.MassTransferMetadata
+	24, // 13: hearth.events.TransactionMetadata.lease:type_name -> hearth.events.TransactionMetadata.LeaseMetadata
+	7,  // 14: hearth.events.BlockchainUpdated.Append.block:type_name -> hearth.events.BlockchainUpdated.Append.BlockAppend
+	8,  // 15: hearth.events.BlockchainUpdated.Append.micro_block:type_name -> hearth.events.BlockchainUpdated.Append.MicroBlockAppend
+	4,  // 16: hearth.events.BlockchainUpdated.Append.transactions_metadata:type_name -> hearth.events.TransactionMetadata
+	3,  // 17: hearth.events.BlockchainUpdated.Append.state_update:type_name -> hearth.events.StateUpdate
+	3,  // 18: hearth.events.BlockchainUpdated.Append.transaction_state_updates:type_name -> hearth.events.StateUpdate
+	0,  // 19: hearth.events.BlockchainUpdated.Rollback.type:type_name -> hearth.events.BlockchainUpdated.Rollback.RollbackType
+	26, // 20: hearth.events.BlockchainUpdated.Rollback.removed_blocks:type_name -> hearth.Block
+	3,  // 21: hearth.events.BlockchainUpdated.Rollback.rollback_state_update:type_name -> hearth.events.StateUpdate
+	26, // 22: hearth.events.BlockchainUpdated.Append.BlockAppend.block:type_name -> hearth.Block
+	27, // 23: hearth.events.BlockchainUpdated.Append.BlockAppend.reward_shares:type_name -> hearth.RewardShare
+	28, // 24: hearth.events.BlockchainUpdated.Append.MicroBlockAppend.micro_block:type_name -> hearth.SignedMicroBlock
+	29, // 25: hearth.events.StateUpdate.BalanceUpdate.amount_after:type_name -> hearth.Amount
+	29, // 26: hearth.events.StateUpdate.ReserveUpdate.amount_after:type_name -> hearth.Amount
+	29, // 27: hearth.events.StateUpdate.SettleUpdate.settled_after:type_name -> hearth.Amount
+	19, // 28: hearth.events.StateUpdate.StakingPayout.payouts:type_name -> hearth.events.StateUpdate.StakingPayout.Payout
+	1,  // 29: hearth.events.StateUpdate.LeaseUpdate.status_after:type_name -> hearth.events.StateUpdate.LeaseUpdate.LeaseStatus
+	16, // 30: hearth.events.StateUpdate.AssetStateUpdate.before:type_name -> hearth.events.StateUpdate.AssetDetails
+	16, // 31: hearth.events.StateUpdate.AssetStateUpdate.after:type_name -> hearth.events.StateUpdate.AssetDetails
+	20, // 32: hearth.events.StateUpdate.AssetDetails.script_info:type_name -> hearth.events.StateUpdate.AssetDetails.AssetScriptInfo
+	29, // 33: hearth.events.TransactionMetadata.EthereumTransferMetadata.amount:type_name -> hearth.Amount
+	34, // [34:34] is the sub-list for method output_type
+	34, // [34:34] is the sub-list for method input_type
+	34, // [34:34] is the sub-list for extension type_name
+	34, // [34:34] is the sub-list for extension extendee
+	0,  // [0:34] is the sub-list for field type_name
 }
 
 func init() { file_hearth_events_events_proto_init() }
@@ -1978,7 +2154,7 @@ func file_hearth_events_events_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_hearth_events_events_proto_rawDesc), len(file_hearth_events_events_proto_rawDesc)),
 			NumEnums:      2,
-			NumMessages:   22,
+			NumMessages:   24,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
