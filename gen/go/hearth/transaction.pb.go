@@ -92,6 +92,7 @@ type Transaction struct {
 	//	*Transaction_Settle
 	//	*Transaction_Withdraw
 	//	*Transaction_UpdateCollateral
+	//	*Transaction_Stake
 	Data          isTransaction_Data `protobuf_oneof:"data"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -261,6 +262,15 @@ func (x *Transaction) GetUpdateCollateral() *UpdateCollateralTransactionData {
 	return nil
 }
 
+func (x *Transaction) GetStake() *StakeTransactionData {
+	if x != nil {
+		if x, ok := x.Data.(*Transaction_Stake); ok {
+			return x.Stake
+		}
+	}
+	return nil
+}
+
 type isTransaction_Data interface {
 	isTransaction_Data()
 }
@@ -309,6 +319,10 @@ type Transaction_UpdateCollateral struct {
 	UpdateCollateral *UpdateCollateralTransactionData `protobuf:"bytes,111,opt,name=update_collateral,json=updateCollateral,proto3,oneof"`
 }
 
+type Transaction_Stake struct {
+	Stake *StakeTransactionData `protobuf:"bytes,112,opt,name=stake,proto3,oneof"`
+}
+
 func (*Transaction_Transfer) isTransaction_Data() {}
 
 func (*Transaction_Exchange) isTransaction_Data() {}
@@ -330,6 +344,8 @@ func (*Transaction_Settle) isTransaction_Data() {}
 func (*Transaction_Withdraw) isTransaction_Data() {}
 
 func (*Transaction_UpdateCollateral) isTransaction_Data() {}
+
+func (*Transaction_Stake) isTransaction_Data() {}
 
 type TransferTransactionData struct {
 	state         protoimpl.MessageState              `protogen:"open.v1"`
@@ -1024,6 +1040,68 @@ func (x *WithdrawTransactionData) GetFeeAssetId() []byte {
 	return nil
 }
 
+// Stakes HRTH from the sender, starting with the generation period beginning at period_start.
+//
+// period_start must be the start height of the period *following* the one the transaction is applied in: a stake
+// never takes effect in the epoch it is sent in. The HRTH is locked immediately on acceptance, but earns nothing
+// until period_start, and from then on it earns for every period until another StakeTransactionData changes it.
+// Several of these in one period are allowed and the last one applied wins.
+//
+// amount is the new total staked, not a delta, and may be 0: that releases everything currently staked at the start
+// of period_start. It is therefore an int64 rather than an Amount - a stake is always denominated in HRTH, and 0 is
+// a meaningful value here, unlike everywhere else a transaction carries an amount.
+type StakeTransactionData struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PeriodStart   uint32                 `protobuf:"varint,1,opt,name=period_start,json=periodStart,proto3" json:"period_start,omitempty"`
+	Amount        int64                  `protobuf:"varint,2,opt,name=amount,proto3" json:"amount,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *StakeTransactionData) Reset() {
+	*x = StakeTransactionData{}
+	mi := &file_hearth_transaction_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StakeTransactionData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StakeTransactionData) ProtoMessage() {}
+
+func (x *StakeTransactionData) ProtoReflect() protoreflect.Message {
+	mi := &file_hearth_transaction_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StakeTransactionData.ProtoReflect.Descriptor instead.
+func (*StakeTransactionData) Descriptor() ([]byte, []int) {
+	return file_hearth_transaction_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *StakeTransactionData) GetPeriodStart() uint32 {
+	if x != nil {
+		return x.PeriodStart
+	}
+	return 0
+}
+
+func (x *StakeTransactionData) GetAmount() int64 {
+	if x != nil {
+		return x.Amount
+	}
+	return 0
+}
+
 type TransferTransactionData_Transfer struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Recipient     *Recipient             `protobuf:"bytes,1,opt,name=recipient,proto3" json:"recipient,omitempty"`
@@ -1034,7 +1112,7 @@ type TransferTransactionData_Transfer struct {
 
 func (x *TransferTransactionData_Transfer) Reset() {
 	*x = TransferTransactionData_Transfer{}
-	mi := &file_hearth_transaction_proto_msgTypes[13]
+	mi := &file_hearth_transaction_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1046,7 +1124,7 @@ func (x *TransferTransactionData_Transfer) String() string {
 func (*TransferTransactionData_Transfer) ProtoMessage() {}
 
 func (x *TransferTransactionData_Transfer) ProtoReflect() protoreflect.Message {
-	mi := &file_hearth_transaction_proto_msgTypes[13]
+	mi := &file_hearth_transaction_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1086,7 +1164,7 @@ type SettleTransactionData_Settlement struct {
 
 func (x *SettleTransactionData_Settlement) Reset() {
 	*x = SettleTransactionData_Settlement{}
-	mi := &file_hearth_transaction_proto_msgTypes[14]
+	mi := &file_hearth_transaction_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1098,7 +1176,7 @@ func (x *SettleTransactionData_Settlement) String() string {
 func (*SettleTransactionData_Settlement) ProtoMessage() {}
 
 func (x *SettleTransactionData_Settlement) ProtoReflect() protoreflect.Message {
-	mi := &file_hearth_transaction_proto_msgTypes[14]
+	mi := &file_hearth_transaction_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1135,7 +1213,7 @@ const file_hearth_transaction_proto_rawDesc = "" +
 	"\x18hearth/transaction.proto\x12\x06hearth\x1a\x13hearth/amount.proto\x1a\x16hearth/recipient.proto\x1a\x12hearth/order.proto\"b\n" +
 	"\x11SignedTransaction\x125\n" +
 	"\vtransaction\x18\x01 \x01(\v2\x13.hearth.TransactionR\vtransaction\x12\x16\n" +
-	"\x06proofs\x18\x02 \x03(\fR\x06proofs\"\x85\a\n" +
+	"\x06proofs\x18\x02 \x03(\fR\x06proofs\"\xbb\a\n" +
 	"\vTransaction\x12\x1d\n" +
 	"\n" +
 	"network_id\x18\x01 \x01(\tR\tnetworkId\x12*\n" +
@@ -1154,7 +1232,8 @@ const file_hearth_transaction_proto_rawDesc = "" +
 	"bindApiKey\x127\n" +
 	"\x06settle\x18m \x01(\v2\x1d.hearth.SettleTransactionDataH\x00R\x06settle\x12=\n" +
 	"\bwithdraw\x18n \x01(\v2\x1f.hearth.WithdrawTransactionDataH\x00R\bwithdraw\x12V\n" +
-	"\x11update_collateral\x18o \x01(\v2'.hearth.UpdateCollateralTransactionDataH\x00R\x10updateCollateralB\x06\n" +
+	"\x11update_collateral\x18o \x01(\v2'.hearth.UpdateCollateralTransactionDataH\x00R\x10updateCollateral\x124\n" +
+	"\x05stake\x18p \x01(\v2\x1c.hearth.StakeTransactionDataH\x00R\x05stakeB\x06\n" +
 	"\x04data\"\x93\x02\n" +
 	"\x17TransferTransactionData\x12\x19\n" +
 	"\basset_id\x18\x01 \x01(\fR\aassetId\x12F\n" +
@@ -1224,7 +1303,10 @@ const file_hearth_transaction_proto_rawDesc = "" +
 	"from_miner\x18\x01 \x01(\v2\x11.hearth.RecipientR\tfromMiner\x12&\n" +
 	"\x06amount\x18\x02 \x01(\v2\x0e.hearth.AmountR\x06amount\x12 \n" +
 	"\ffee_asset_id\x18\x03 \x01(\fR\n" +
-	"feeAssetIdBb\n" +
+	"feeAssetId\"Q\n" +
+	"\x14StakeTransactionData\x12!\n" +
+	"\fperiod_start\x18\x01 \x01(\rR\vperiodStart\x12\x16\n" +
+	"\x06amount\x18\x02 \x01(\x03R\x06amountBb\n" +
 	" tech.hearth.protobuf.transactionZ5github.com/hearthchain/protobuf-schemas/gen/go/hearth\xaa\x02\x06Hearthb\x06proto3"
 
 var (
@@ -1239,7 +1321,7 @@ func file_hearth_transaction_proto_rawDescGZIP() []byte {
 	return file_hearth_transaction_proto_rawDescData
 }
 
-var file_hearth_transaction_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_hearth_transaction_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
 var file_hearth_transaction_proto_goTypes = []any{
 	(*SignedTransaction)(nil),                 // 0: hearth.SignedTransaction
 	(*Transaction)(nil),                       // 1: hearth.Transaction
@@ -1254,11 +1336,12 @@ var file_hearth_transaction_proto_goTypes = []any{
 	(*ReserveTransactionData)(nil),            // 10: hearth.ReserveTransactionData
 	(*SettleTransactionData)(nil),             // 11: hearth.SettleTransactionData
 	(*WithdrawTransactionData)(nil),           // 12: hearth.WithdrawTransactionData
-	(*TransferTransactionData_Transfer)(nil),  // 13: hearth.TransferTransactionData.Transfer
-	(*SettleTransactionData_Settlement)(nil),  // 14: hearth.SettleTransactionData.Settlement
-	(*Recipient)(nil),                         // 15: hearth.Recipient
-	(*Order)(nil),                             // 16: hearth.Order
-	(*Amount)(nil),                            // 17: hearth.Amount
+	(*StakeTransactionData)(nil),              // 13: hearth.StakeTransactionData
+	(*TransferTransactionData_Transfer)(nil),  // 14: hearth.TransferTransactionData.Transfer
+	(*SettleTransactionData_Settlement)(nil),  // 15: hearth.SettleTransactionData.Settlement
+	(*Recipient)(nil),                         // 16: hearth.Recipient
+	(*Order)(nil),                             // 17: hearth.Order
+	(*Amount)(nil),                            // 18: hearth.Amount
 }
 var file_hearth_transaction_proto_depIdxs = []int32{
 	1,  // 0: hearth.SignedTransaction.transaction:type_name -> hearth.Transaction
@@ -1273,23 +1356,24 @@ var file_hearth_transaction_proto_depIdxs = []int32{
 	11, // 9: hearth.Transaction.settle:type_name -> hearth.SettleTransactionData
 	12, // 10: hearth.Transaction.withdraw:type_name -> hearth.WithdrawTransactionData
 	8,  // 11: hearth.Transaction.update_collateral:type_name -> hearth.UpdateCollateralTransactionData
-	13, // 12: hearth.TransferTransactionData.transfers:type_name -> hearth.TransferTransactionData.Transfer
-	15, // 13: hearth.LeaseTransactionData.recipient:type_name -> hearth.Recipient
-	16, // 14: hearth.ExchangeTransactionData.orders:type_name -> hearth.Order
-	15, // 15: hearth.StartBoostTransactionData.validator:type_name -> hearth.Recipient
-	17, // 16: hearth.ReserveTransactionData.amount:type_name -> hearth.Amount
-	15, // 17: hearth.ReserveTransactionData.miner:type_name -> hearth.Recipient
-	14, // 18: hearth.SettleTransactionData.settlements:type_name -> hearth.SettleTransactionData.Settlement
-	15, // 19: hearth.WithdrawTransactionData.from_miner:type_name -> hearth.Recipient
-	17, // 20: hearth.WithdrawTransactionData.amount:type_name -> hearth.Amount
-	15, // 21: hearth.TransferTransactionData.Transfer.recipient:type_name -> hearth.Recipient
-	15, // 22: hearth.SettleTransactionData.Settlement.client:type_name -> hearth.Recipient
-	17, // 23: hearth.SettleTransactionData.Settlement.cumulative_spent:type_name -> hearth.Amount
-	24, // [24:24] is the sub-list for method output_type
-	24, // [24:24] is the sub-list for method input_type
-	24, // [24:24] is the sub-list for extension type_name
-	24, // [24:24] is the sub-list for extension extendee
-	0,  // [0:24] is the sub-list for field type_name
+	13, // 12: hearth.Transaction.stake:type_name -> hearth.StakeTransactionData
+	14, // 13: hearth.TransferTransactionData.transfers:type_name -> hearth.TransferTransactionData.Transfer
+	16, // 14: hearth.LeaseTransactionData.recipient:type_name -> hearth.Recipient
+	17, // 15: hearth.ExchangeTransactionData.orders:type_name -> hearth.Order
+	16, // 16: hearth.StartBoostTransactionData.validator:type_name -> hearth.Recipient
+	18, // 17: hearth.ReserveTransactionData.amount:type_name -> hearth.Amount
+	16, // 18: hearth.ReserveTransactionData.miner:type_name -> hearth.Recipient
+	15, // 19: hearth.SettleTransactionData.settlements:type_name -> hearth.SettleTransactionData.Settlement
+	16, // 20: hearth.WithdrawTransactionData.from_miner:type_name -> hearth.Recipient
+	18, // 21: hearth.WithdrawTransactionData.amount:type_name -> hearth.Amount
+	16, // 22: hearth.TransferTransactionData.Transfer.recipient:type_name -> hearth.Recipient
+	16, // 23: hearth.SettleTransactionData.Settlement.client:type_name -> hearth.Recipient
+	18, // 24: hearth.SettleTransactionData.Settlement.cumulative_spent:type_name -> hearth.Amount
+	25, // [25:25] is the sub-list for method output_type
+	25, // [25:25] is the sub-list for method input_type
+	25, // [25:25] is the sub-list for extension type_name
+	25, // [25:25] is the sub-list for extension extendee
+	0,  // [0:25] is the sub-list for field type_name
 }
 
 func init() { file_hearth_transaction_proto_init() }
@@ -1312,6 +1396,7 @@ func file_hearth_transaction_proto_init() {
 		(*Transaction_Settle)(nil),
 		(*Transaction_Withdraw)(nil),
 		(*Transaction_UpdateCollateral)(nil),
+		(*Transaction_Stake)(nil),
 	}
 	file_hearth_transaction_proto_msgTypes[8].OneofWrappers = []any{}
 	type x struct{}
@@ -1320,7 +1405,7 @@ func file_hearth_transaction_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_hearth_transaction_proto_rawDesc), len(file_hearth_transaction_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   15,
+			NumMessages:   16,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

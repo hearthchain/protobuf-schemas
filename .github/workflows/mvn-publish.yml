@@ -31,17 +31,19 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
         with:
           java-version: 11
           distribution: temurin
           check-latest: true
           cache: maven
           server-id: central
-          server-username: MAVEN_CENTRAL_USERNAME
-          server-password: MAVEN_CENTRAL_PASSWORD
+          server-username-env-var: MAVEN_CENTRAL_USERNAME
+          server-password-env-var: MAVEN_CENTRAL_PASSWORD
           gpg-private-key: ${{ secrets.OSSRH_GPG_KEY }}
+          mvn-server-repository-origins: |
+            central:https://central.sonatype.com
       - name: Publish artifacts
         env:
           MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}

@@ -65,6 +65,7 @@ message StateUpdate {
     repeated LeaseUpdate individual_leases = 5;
     repeated ReserveUpdate reserves = 7;
     repeated SettleUpdate settlements = 8;
+    StakingPayout staking_payout = 9;
 
     message BalanceUpdate {
         bytes address = 1;
@@ -93,6 +94,31 @@ message StateUpdate {
         bytes operator = 2;
         Amount settled_after = 3;
         int64 settled_before = 4;
+    }
+
+    /*
+    What stakers were paid for one finished generation period. Carried only by the state update of the first block
+    of the next period, the one that mints the Cred; the credited amounts also appear in `balances` as ordinary
+    balance changes of `asset_id`. A rollback state update never carries it: the reversed balance changes undo the
+    payout.
+    */
+    message StakingPayout {
+        message Payout {
+            bytes address = 1;
+            // The stake in force for the period, in HRTH embers.
+            int64 staked = 2;
+            // Cred credited for it; 0 when the pro-rata share floored to zero.
+            int64 credited = 3;
+        }
+
+        int32 period_start = 1;
+        int32 period_end = 2;
+        bytes asset_id = 3;
+        // The period's total tracked work, which is what was split between the stakers.
+        int64 issued = 4;
+        // Sum of `staked` over `payouts`. Encoding: like Java BigInteger#toByteArray, see AssetDetails.safe_volume.
+        bytes total_staked = 5;
+        repeated Payout payouts = 6;
     }
 
     message LeasingUpdate {
