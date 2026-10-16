@@ -955,7 +955,8 @@ func (x *StateUpdate_SettleUpdate) GetSettledBefore() int64 {
 
 // What stakers were paid for one finished generation period. Carried only by the state update of the first block
 // of the next period, the one that mints the Cred; the credited amounts also appear in `balances` as ordinary
-// balance changes of `asset_id`. In a rollback state update it means the payout was undone.
+// balance changes of `asset_id`. A rollback state update never carries it: the reversed balance changes undo the
+// payout.
 type StateUpdate_StakingPayout struct {
 	state       protoimpl.MessageState `protogen:"open.v1"`
 	PeriodStart int32                  `protobuf:"varint,1,opt,name=period_start,json=periodStart,proto3" json:"period_start,omitempty"`
