@@ -17,6 +17,7 @@ message Block {
             bytes state_hash = 7;
             bytes header_signature = 8;
             FinalizationVoting finalization_voting = 9;
+            bytes vrf_public_key = 10;
         }
 
         string network_id = 1;
@@ -30,6 +31,9 @@ message Block {
         bytes state_hash = 11;
         ChallengedHeader challenged_header = 12;
         FinalizationVoting finalization_voting = 13;
+        // Set only on the first block an uncommitted generator forges in a period: implicitly commits this VRF key
+        // for the rest of that period
+        bytes vrf_public_key = 14;
     }
 
     Header header = 1;
